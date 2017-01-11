@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="rate">
+        <item>最新基准利率7折</item>
+        <item>最新基准利率8折</item>
+        <item>最新基准利率8.3折</item>
+        <item>最新基准利率8.5折</item>
+        <item>最新基准利率8.8折</item>
+        <item>最新基准利率9折</item>
+        <item>最新基准利率9.5折</item>
+        <item>最新基准利率</item>
+        <item>最新基准利率1.05倍</item>
+        <item>最新基准利率1.1倍</item>
+        <item>最新基准利率1.2倍</item>
+        <item>最新基准利率1.3倍</item>
+    </string-array>
+    <string-array name="rate_value">
+        <item>0.7</item>
+        <item>0.8</item>
+        <item>0.83</item>
+        <item>0.85</item>
+        <item>0.88</item>
+        <item>0.9</item>
+        <item>0.95</item>
+        <item>1</item>
+        <item>1.05</item>
+        <item>1.1</item>
+        <item>1.2</item>
+        <item>1.3</item>
+    </string-array>
+</resources>
