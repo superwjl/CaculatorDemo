@@ -5,7 +5,8 @@
     android:orientation="vertical">
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:paddingRight="10dp">
         <RadioGroup
             android:id="@+id/rg_payment"
             android:layout_width="wrap_content"
@@ -54,6 +55,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="总利息："/>
+            <TextView
+                android:id="@+id/tv_rate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="利率："/>
         </LinearLayout>
 
     </RelativeLayout>
@@ -65,7 +71,7 @@
         android:gravity="center">
         <TextView
             android:id="@+id/stage"
-            android:layout_width="40dp"
+            android:layout_width="50dp"
             android:layout_height="match_parent"
             android:gravity="center"
             android:text="期数"/>

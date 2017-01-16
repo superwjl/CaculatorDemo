@@ -10,6 +10,8 @@
     <color name="uc_272727">#272727</color>
     <color name="uc_ff5a37">#ff5a37</color>
     <color name="uc_cdcdcd">#cdcdcd</color>
+    <color name="uc_benjin">#5D8EDD</color>
+    <color name="uc_lixi">#F3D465</color>
 
     <!-- 省市区三级联动选择中心矩形框颜色 -->
     <color name="wheel_line_border">#d9d9d9</color>

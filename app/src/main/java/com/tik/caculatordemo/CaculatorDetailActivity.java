@@ -27,9 +27,9 @@ import com.tik.caculatordemo.bean.LoanBean;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 
 import butterknife.BindView;
+
 
 /**
  * @auth tik
@@ -43,41 +43,51 @@ public class CaculatorDetailActivity extends BaseActivity {
     @BindView(R.id.rg_payment)
     RadioGroup radioGroup;
 
+    /** 总贷款 */
     @BindView(R.id.tv_sum_benjin)
     TextView tvSumBenjin;
 
+    /** 总利息 */
     @BindView(R.id.tv_sum_lixi)
     TextView tvSumLixi;
 
+    /** 利率 */
+    @BindView(R.id.tv_rate)
+    TextView tvRate;
+
     private CommonAdapter<LoanBean> mAdapter;
+    /** 等额本金计算得出的还款明细列表 */
     private List<LoanBean> mBenjinDatas = new ArrayList<>();
+    /** 等额本息计算得出的还款明细列表 */
     private List<LoanBean> mBenxiDatas = new ArrayList<>();
 
+    /** 贷款总额 */
     private int mTotal;
+    /** 贷款年数 */
     private int mYear;
+    /** 利率(double类型) */
     private double mRate;
+    /** 利率(String类型) */
+    private String mRateStr;
+    /** 贷款类型 0:等额本息  1:等额本金 */
     private int mType;
+    /** 当前选择的年数所在列表位置 */
     private int mSelectPosition = -1;
+    /** 已还本金 */
     private int mSumBenjin;
+    /** 已还本息 */
     private int mSumBenxi;
-
-    private Handler mHandler = new Handler(){
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            mAdapter.notifyDataSetChanged();
-        }
-    };
 
 
     @Override
     protected void beforeBindViews(Bundle savedInstanceState) {
+        setTitle("还款详情");
         Bundle extras = getIntent().getExtras();
         if(extras != null){
             mTotal = extras.getInt("total");
             mYear = extras.getInt("year");
-            String rate = extras.getString("rate");
-            mRate = new BigDecimal(rate).divide(new BigDecimal(100), 4, BigDecimal.ROUND_HALF_UP).doubleValue();
+            mRateStr = extras.getString("rate");
+            mRate = new BigDecimal(mRateStr).divide(new BigDecimal(100), 4, BigDecimal.ROUND_HALF_UP).doubleValue();
             mType = extras.getInt("type");
             Log.e("tag", extras.toString()+"mRate="+mRate);
         }
@@ -167,10 +177,15 @@ public class CaculatorDetailActivity extends BaseActivity {
                 return false;
             }
         });
+
+        /* 显示总贷款和利率 */
         String total = String.valueOf(mTotal);
         SpannableString ss = new SpannableString("总贷款："+mTotal+"元");
         ss.setSpan(new ForegroundColorSpan(Color.RED), 4, 4+total.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         tvSumBenjin.setText(ss);
+        SpannableString ss2 = new SpannableString("利    率："+mRateStr+"%");
+        ss2.setSpan(new ForegroundColorSpan(Color.RED), 7, 7+mRateStr.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        tvRate.setText(ss2);
         new ComputeTask(mTotal, mYear, mRate, mType).execute();
     }
 

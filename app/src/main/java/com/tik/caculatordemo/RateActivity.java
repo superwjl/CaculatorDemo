@@ -17,6 +17,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.tik.caculatordemo.adapter.recyclerview.CommonAdapter;
 import com.tik.caculatordemo.adapter.recyclerview.DividerItemDecoration;
@@ -58,7 +59,9 @@ public class RateActivity extends BaseActivity {
         Bundle extras = getIntent().getExtras();
         if(extras != null){
             mRateStr = extras.getString("rate");
-            mRateStr = new BigDecimal(mRateStr).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue()+"";
+            if(mRateStr != null && mRateStr.length() != 0){
+                mRateStr = new BigDecimal(mRateStr).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue()+"";
+            }
         }
         Log.e("tag", "rateStr="+mRateStr);
         String[] rate = getResources().getStringArray(R.array.rate);
@@ -95,6 +98,29 @@ public class RateActivity extends BaseActivity {
         View header = LayoutInflater.from(this).inflate(R.layout.rate_header, null);
         mEtRate = (EditText) header.findViewById(R.id.et_rate);
         mEtRate.setText(mRateStr);
+        mEtRate.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                // 过滤0开头的数值（0除外）
+                String temp = s.toString();
+                if(temp.length() == 1 && temp.equals(".")){
+                    s.delete(0, 1);
+                }if(temp.length() == 2 && temp.startsWith("0") && !temp.endsWith(".")){
+                    s.delete(0, 1);
+                }
+
+            }
+        });
         headerAndFooterWrapper.addHeaderView(header);
 
         mAdatper.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
@@ -122,6 +148,14 @@ public class RateActivity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
+        mRateStr = mEtRate.getText().toString();
+        if(mRateStr.endsWith(".")){
+            mRateStr = mRateStr.replace(".", "");
+        }
+        if(mRateStr.length() == 0 || Double.valueOf(mRateStr) == 0){
+            Toast.makeText(this, "利息不能等于0", Toast.LENGTH_SHORT).show();
+            return;
+        }
         finishWithData();
     }
 

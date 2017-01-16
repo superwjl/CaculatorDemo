@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@color/white">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/house_form_height"
@@ -80,7 +81,7 @@
             android:textCursorDrawable="@null"
             android:maxLength="4"
             android:inputType="numberSigned"
-            android:layout_toLeftOf="@id/amount_unit"
+            android:paddingRight="30dp"
             android:layout_toRightOf="@id/amount_tag"
             android:layout_marginRight="3dp"
             android:layout_centerVertical="true"
@@ -146,12 +147,172 @@
     <Button
         android:id="@+id/btn_caculate"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/house_form_height"
+        android:layout_height="35dp"
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
         android:text="开始计算"
+        android:textSize="14dp"
+        android:gravity="center"
         android:textColor="@android:color/white"
         android:layout_gravity="center_horizontal"
         android:background="@drawable/bg_btn_selector"/>
+    <View
+        android:id="@+id/seperate_view"
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:background="@color/wheel_line_border"
+        android:visibility="gone"/>
+    <LinearLayout
+        android:id="@+id/ll_pie"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="50dp"
+        android:paddingBottom="20dp"
+        android:visibility="gone"
+        >
+        <com.tik.caculatordemo.custom.PieChartView
+            android:id="@+id/piechart"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+            <TextView
+                android:id="@+id/tv_detail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="贷款明细"
+                android:textSize="16dp"
+                android:textColor="@color/black"
+                android:layout_marginLeft="50dp"
+                android:layout_marginBottom="10dp"
+                />
+            <TextView
+                android:id="@+id/tv_sum_benjin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="贷款总额："
+                android:textColor="@color/black"
+                android:layout_alignLeft="@id/tv_detail"
+                android:layout_below="@id/tv_detail"
+                android:layout_marginBottom="5dp"/>
+            <TextView
+                android:id="@+id/tv_sum_benjin_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="60万"
+                android:textColor="@color/uc_272727"
+                android:layout_alignBottom="@id/tv_sum_benjin"
+                android:layout_toRightOf="@+id/tv_sum_benjin"/>
+            <TextView
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:background="@drawable/dot_benjin"
+                android:layout_toLeftOf="@id/tv_sum_benjin"
+                android:layout_alignBottom="@id/tv_sum_benjin"
+                android:layout_marginBottom="3dp"
+                android:layout_marginRight="10dp"
+                />
+            <TextView
+                android:id="@+id/tv_sum_lixi"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="支付利息："
+                android:textColor="@color/black"
+                android:layout_alignLeft="@id/tv_detail"
+                android:layout_below="@id/tv_sum_benjin"
+                android:layout_marginBottom="5dp"/>
+            <TextView
+                android:id="@+id/tv_sum_lixi_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="60万"
+                android:textColor="@color/uc_272727"
+                android:layout_alignBottom="@id/tv_sum_lixi"
+                android:layout_toRightOf="@+id/tv_sum_lixi"/>
+            <TextView
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:background="@drawable/dot_lixi"
+                android:layout_toLeftOf="@id/tv_sum_lixi"
+                android:layout_alignBottom="@id/tv_sum_lixi"
+                android:layout_marginBottom="3dp"
+                android:layout_marginRight="10dp"
+                />
+            <TextView
+                android:id="@+id/tv_lixi"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="利        率："
+                android:textColor="@color/black"
+                android:layout_alignLeft="@id/tv_detail"
+                android:layout_below="@id/tv_sum_lixi"
+                android:layout_marginBottom="5dp"/>
+            <TextView
+                android:id="@+id/tv_lixi_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="4.9%"
+                android:textColor="@color/uc_272727"
+                android:layout_alignBottom="@id/tv_lixi"
+                android:layout_toRightOf="@+id/tv_lixi"/>
+            <TextView
+                android:id="@+id/tv_yuegong"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="参考月供："
+                android:textColor="@color/black"
+                android:layout_alignLeft="@id/tv_detail"
+                android:layout_below="@id/tv_lixi"
+                android:layout_marginBottom="5dp"/>
+            <TextView
+                android:id="@+id/tv_yuegong_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="4000元/月"
+                android:textColor="@color/uc_272727"
+                android:layout_alignBottom="@id/tv_yuegong"
+                android:layout_toRightOf="@+id/tv_yuegong"/>
+            <TextView
+                android:id="@+id/tv_reduce"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="每月递减："
+                android:textColor="@color/black"
+                android:layout_alignLeft="@id/tv_detail"
+                android:layout_below="@id/tv_yuegong"
+                android:layout_marginBottom="5dp"/>
+            <TextView
+                android:id="@+id/tv_reduce_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="6.12元"
+                android:textColor="@color/uc_272727"
+                android:layout_alignBottom="@id/tv_reduce"
+                android:layout_toRightOf="@+id/tv_reduce"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="以上计算结果仅供参考"
+                android:layout_below="@id/tv_reduce"
+                android:layout_alignLeft="@id/tv_detail"/>
+            <TextView
+                android:id="@+id/tv_todetail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:text="详情>"
+                android:textColor="@color/uc_benjin"
+                android:textSize="14dp"
+                android:layout_alignParentRight="true"/>
+        </RelativeLayout>
+
+    </LinearLayout>
 </LinearLayout>
