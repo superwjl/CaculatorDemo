@@ -94,6 +94,16 @@ public class PieChartView extends View {
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        int widthMode = MeasureSpec.getMode(widthMeasureSpec);
+        int heightMode = MeasureSpec.getMode(heightMeasureSpec);
+        int widthSize = MeasureSpec.getSize(widthMeasureSpec);
+        int heightSize = MeasureSpec.getSize(heightMeasureSpec);
+        if(widthMode == MeasureSpec.EXACTLY){
+            mWidth = widthSize;
+        }
+        if(heightMode == MeasureSpec.EXACTLY){
+            mHeight = heightSize;
+        }
         setMeasuredDimension(mWidth, mHeight);
     }
 
