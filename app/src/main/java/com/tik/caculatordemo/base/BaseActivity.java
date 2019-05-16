@@ -8,6 +8,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 
+import com.aitangba.swipeback.SwipeBackActivity;
+
 import butterknife.ButterKnife;
 
 /**
@@ -15,7 +17,7 @@ import butterknife.ButterKnife;
  * @date 17/1/4 下午4:38
  */
 
-public abstract class BaseActivity extends AppCompatActivity {
+public abstract class BaseActivity extends SwipeBackActivity {
 
     protected abstract void beforeBindViews(Bundle savedInstanceState);
 

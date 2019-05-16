@@ -110,7 +110,7 @@ public class PieChartView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        Log.e("tag","---------mtype="+mType);
+//        Log.e("tag","---------mtype="+mType);
         if(mType == 1 || mType == 2){
             canvas.drawArc(new RectF(0, 0, mWidth, mHeight), -90, mProgress1, true, mPaint1);
         }

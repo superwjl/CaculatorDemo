@@ -1,0 +1,18 @@
+ext {
+    android = [
+            compileSdkVersion : 27,
+            buildToolsVersion: "27.0.2",
+
+            minSdkVersion : 14,
+            targetSdkVersion : 21,
+
+            versionCode : 1,
+            versionName : "1.0"
+    ]
+
+    supportV7_ver = "27.1.1"
+    butterknife_ver = "8.4.0"
+    butterknife_compiler_ver = "8.4.0"
+    swipeback_ver = "1.0.2"
+    aspectj_ver = "1.8.9"
+}

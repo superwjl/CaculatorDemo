@@ -1,14 +1,10 @@
 package com.tik.caculatordemo;
 
-import android.app.Activity;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
@@ -35,7 +31,6 @@ import butterknife.BindView;
  * @auth tik
  * @date 17/1/10 下午2:41
  */
-
 public class CaculatorDetailActivity extends BaseActivity {
     @BindView(R.id.recyclerView)
     RecyclerView mRecyclerView;
@@ -43,39 +38,65 @@ public class CaculatorDetailActivity extends BaseActivity {
     @BindView(R.id.rg_payment)
     RadioGroup radioGroup;
 
-    /** 总贷款 */
+    /**
+     * 总贷款
+     */
     @BindView(R.id.tv_sum_benjin)
     TextView tvSumBenjin;
 
-    /** 总利息 */
+    /**
+     * 总利息
+     */
     @BindView(R.id.tv_sum_lixi)
     TextView tvSumLixi;
 
-    /** 利率 */
+    /**
+     * 利率
+     */
     @BindView(R.id.tv_rate)
     TextView tvRate;
 
     private CommonAdapter<LoanBean> mAdapter;
-    /** 等额本金计算得出的还款明细列表 */
+    /**
+     * 等额本金计算得出的还款明细列表
+     */
     private List<LoanBean> mBenjinDatas = new ArrayList<>();
-    /** 等额本息计算得出的还款明细列表 */
+    /**
+     * 等额本息计算得出的还款明细列表
+     */
     private List<LoanBean> mBenxiDatas = new ArrayList<>();
 
-    /** 贷款总额 */
+    /**
+     * 贷款总额
+     */
     private int mTotal;
-    /** 贷款年数 */
+    /**
+     * 贷款年数
+     */
     private int mYear;
-    /** 利率(double类型) */
+    /**
+     * 利率(double类型)
+     */
     private double mRate;
-    /** 利率(String类型) */
+    /**
+     * 利率(String类型)
+     */
     private String mRateStr;
-    /** 贷款类型 0:等额本息  1:等额本金 */
+    /**
+     * 贷款类型 0:等额本息  1:等额本金
+     */
     private int mType;
-    /** 当前选择的年数所在列表位置 */
+    /**
+     * 当前选择的年数所在列表位置
+     */
     private int mSelectPosition = -1;
-    /** 已还本金 */
+    /**
+     * 已还本金
+     */
     private int mSumBenjin;
-    /** 已还本息 */
+    /**
+     * 已还本息
+     */
     private int mSumBenxi;
 
 
@@ -83,13 +104,13 @@ public class CaculatorDetailActivity extends BaseActivity {
     protected void beforeBindViews(Bundle savedInstanceState) {
         setTitle("还款详情");
         Bundle extras = getIntent().getExtras();
-        if(extras != null){
+        if (extras != null) {
             mTotal = extras.getInt("total");
             mYear = extras.getInt("year");
             mRateStr = extras.getString("rate");
             mRate = new BigDecimal(mRateStr).divide(new BigDecimal(100), 4, BigDecimal.ROUND_HALF_UP).doubleValue();
             mType = extras.getInt("type");
-            Log.e("tag", extras.toString()+"mRate="+mRate);
+            Log.e("tag", extras.toString() + "mRate=" + mRate);
         }
     }
 
@@ -99,22 +120,22 @@ public class CaculatorDetailActivity extends BaseActivity {
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-                if(checkedId == R.id.rb_benxi){
+                if (checkedId == R.id.rb_benxi) {
                     mType = 0;
-                    if(mBenxiDatas != null && mBenxiDatas.size() != 0){
+                    if (mBenxiDatas != null && mBenxiDatas.size() != 0) {
                         mAdapter.setData(mBenxiDatas);
                         mAdapter.notifyDataSetChanged();
                         setLixiTextColor(mSumBenxi);
-                    }else{
+                    } else {
                         new ComputeTask(mTotal, mYear, mRate, mType).execute();
                     }
-                }else{
+                } else {
                     mType = 1;
-                    if(mBenjinDatas != null && mBenjinDatas.size() != 0){
+                    if (mBenjinDatas != null && mBenjinDatas.size() != 0) {
                         mAdapter.setData(mBenjinDatas);
                         mAdapter.notifyDataSetChanged();
                         setLixiTextColor(mSumBenjin);
-                    }else{
+                    } else {
                         new ComputeTask(mTotal, mYear, mRate, mType).execute();
                     }
                 }
@@ -124,15 +145,15 @@ public class CaculatorDetailActivity extends BaseActivity {
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
         List<LoanBean> list;
-        if(mType == 0){
+        if (mType == 0) {
             list = mBenxiDatas;
-        }else{
+        } else {
             list = mBenjinDatas;
         }
         mAdapter = new CommonAdapter<LoanBean>(this, R.layout.item_caculator, list) {
             @Override
             protected void convert(ViewHolder holder, LoanBean loanBean, int position) {
-                holder.setText(R.id.stage, loanBean.getStage()+"");
+                holder.setText(R.id.stage, loanBean.getStage() + "");
                 holder.setText(R.id.repayTotal, loanBean.getYuegong() + "");
                 holder.setText(R.id.repayPrincipal, loanBean.getYuegongbenjin() + "");
                 holder.setText(R.id.repayInterest, loanBean.getYuegonglixi() + "");
@@ -140,7 +161,7 @@ public class CaculatorDetailActivity extends BaseActivity {
                 holder.setText(R.id.leftPrincipal, loanBean.getBenjinLeft() + "");
                 holder.setText(R.id.repaidPrincipal, loanBean.getBenjinRepaid() + "");
                 holder.setText(R.id.repaidInterest, loanBean.getLixiRepaid() + "");
-                if(mSelectPosition == position){
+                if (mSelectPosition == position) {
                     holder.setBackgroundColor(R.id.ll_detail, getResources().getColor(R.color.uc_cdcdcd));
                     holder.setTextColor(R.id.stage, Color.RED);
                     holder.setTextColor(R.id.repayTotal, Color.RED);
@@ -150,7 +171,7 @@ public class CaculatorDetailActivity extends BaseActivity {
                     holder.setTextColor(R.id.leftPrincipal, Color.RED);
                     holder.setTextColor(R.id.repaidPrincipal, Color.RED);
                     holder.setTextColor(R.id.repaidInterest, Color.RED);
-                }else{
+                } else {
                     holder.setBackgroundColor(R.id.ll_detail, getResources().getColor(android.R.color.transparent));
                     holder.setTextColor(R.id.stage, Color.BLACK);
                     holder.setTextColor(R.id.repayTotal, Color.BLACK);
@@ -180,13 +201,14 @@ public class CaculatorDetailActivity extends BaseActivity {
 
         /* 显示总贷款和利率 */
         String total = String.valueOf(mTotal);
-        SpannableString ss = new SpannableString("总贷款："+mTotal+"元");
-        ss.setSpan(new ForegroundColorSpan(Color.RED), 4, 4+total.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        SpannableString ss = new SpannableString("总贷款：" + mTotal + "元");
+        ss.setSpan(new ForegroundColorSpan(Color.RED), 4, 4 + total.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         tvSumBenjin.setText(ss);
-        SpannableString ss2 = new SpannableString("利    率："+mRateStr+"%");
-        ss2.setSpan(new ForegroundColorSpan(Color.RED), 7, 7+mRateStr.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        SpannableString ss2 = new SpannableString("利    率：" + mRateStr + "%");
+        ss2.setSpan(new ForegroundColorSpan(Color.RED), 7, 7 + mRateStr.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         tvRate.setText(ss2);
         new ComputeTask(mTotal, mYear, mRate, mType).execute();
+
     }
 
     @Override
@@ -195,7 +217,7 @@ public class CaculatorDetailActivity extends BaseActivity {
     }
 
 
-    private List<LoanBean> computeBenxi(int total, int year, double rate){
+    private List<LoanBean> computeBenxi(int total, int year, double rate) {
         /**
          * 贷款50万， 时间20年，利率按照利率5.9%计算：
          每月应还款额＝500000×5.9%/12×（1＋5.9%/12）^240/[（1＋5.9%/12）^240－1]
@@ -203,7 +225,7 @@ public class CaculatorDetailActivity extends BaseActivity {
          */
         List<LoanBean> list = new ArrayList<>();
         //月利率
-        double rateM = rate/12;
+        double rateM = rate / 12;
         double d1 = Math.pow(1 + rateM, year * 12);
         int yuegong = (int) (((total * rateM * d1) / (d1 - 1)) + 0.5d);
         //已还利息总和
@@ -214,15 +236,15 @@ public class CaculatorDetailActivity extends BaseActivity {
         int sumBenjin = 0;
         //期数
         int size = year * 12;
-        for (int i = 0; i < size; i++){
+        for (int i = 0; i < size; i++) {
             int lixi = (int) ((total - sumBenjin) * rateM + 0.5d);
             int benjin = yuegong - lixi;
             sumBenjin += benjin;
             sumLixi += lixi;
             sumBenxi += yuegong;
-            Log.i("TAG", "month("+(i+1)+") = 月供=" + yuegong + ", 本金="+benjin+", 利息="+lixi+", 剩余本金="+(total-sumBenjin) + "，已还利息="+sumLixi+",已还="+sumBenxi);
+//            Log.i("TAG", "month(" + (i + 1) + ") = 月供=" + yuegong + ", 本金=" + benjin + ", 利息=" + lixi + ", 剩余本金=" + (total - sumBenjin) + "，已还利息=" + sumLixi + ",已还=" + sumBenxi);
             LoanBean loan = new LoanBean();
-            loan.setStage(i+1);
+            loan.setStage(i + 1);
             loan.setYuegong(yuegong);
             loan.setYuegongbenjin(benjin);
             loan.setYuegonglixi(lixi);
@@ -235,30 +257,31 @@ public class CaculatorDetailActivity extends BaseActivity {
         mSumBenxi = sumLixi;
         return list;
     }
-    private List<LoanBean> computeBenjin(int total, int year, double rate){
+
+    private List<LoanBean> computeBenjin(int total, int year, double rate) {
         List<LoanBean> list = new ArrayList<>();
         //月利率
-        double rateM = rate/12;
+        double rateM = rate / 12;
         //月还本金
-        int dx = total/year/12;
+        int dx = total / year / 12;
         //已还利息总和
         int sumRate = 0;
         //已还本息总和
         int sumCost = 0;
         //期数
         int size = year * 12;
-        for (int i = 0; i < size; i++){
+        for (int i = 0; i < size; i++) {
             int r = (int) ((total - dx * i) * rateM + 0.5d);
             sumRate += r;
-            sumCost += (dx+r);
-            Log.i("TAG", "month("+(i+1)+") = 月供=" + (dx+r) + ", 本金="+dx+", 利息="+r+", 剩余本金="+(total-dx*(i+1)) + "，已还利息="+sumRate+",已还="+sumCost);
+            sumCost += (dx + r);
+//            Log.i("TAG", "month(" + (i + 1) + ") = 月供=" + (dx + r) + ", 本金=" + dx + ", 利息=" + r + ", 剩余本金=" + (total - dx * (i + 1)) + "，已还利息=" + sumRate + ",已还=" + sumCost);
             LoanBean loan = new LoanBean();
-            loan.setStage(i+1);
-            loan.setYuegong(dx+r);
+            loan.setStage(i + 1);
+            loan.setYuegong(dx + r);
             loan.setYuegongbenjin(dx);
             loan.setYuegonglixi(r);
             loan.setTotalRepaid(sumCost);
-            loan.setBenjinRepaid(dx*(i+1));
+            loan.setBenjinRepaid(dx * (i + 1));
             loan.setLixiRepaid(sumRate);
             loan.setBenjinLeft(total - loan.getBenjinRepaid());
             list.add(loan);
@@ -267,7 +290,7 @@ public class CaculatorDetailActivity extends BaseActivity {
         return list;
     }
 
-    class ComputeTask extends AsyncTask<Void, Void, List<LoanBean>>{
+    class ComputeTask extends AsyncTask<Void, Void, List<LoanBean>> {
 
         private int mTotal;
         private int mYear;
@@ -283,9 +306,9 @@ public class CaculatorDetailActivity extends BaseActivity {
 
         @Override
         protected List<LoanBean> doInBackground(Void... params) {
-            if(mType == 0){
+            if (mType == 0) {
                 return computeBenxi(mTotal, mYear, mRate);
-            }else{
+            } else {
                 return computeBenjin(mTotal, mYear, mRate);
             }
 
@@ -294,11 +317,11 @@ public class CaculatorDetailActivity extends BaseActivity {
         @Override
         protected void onPostExecute(List<LoanBean> list) {
             super.onPostExecute(list);
-            if(mType == 0){
+            if (mType == 0) {
                 mBenxiDatas = list;
                 mAdapter.setData(mBenxiDatas);
                 setLixiTextColor(mSumBenxi);
-            }else{
+            } else {
                 mBenjinDatas = list;
                 mAdapter.setData(mBenjinDatas);
                 setLixiTextColor(mSumBenjin);
@@ -308,10 +331,10 @@ public class CaculatorDetailActivity extends BaseActivity {
         }
     }
 
-    private void setLixiTextColor(int sum){
+    private void setLixiTextColor(int sum) {
         String s = String.valueOf(sum);
-        SpannableString ss = new SpannableString("总利息："+s+"元");
-        ss.setSpan(new ForegroundColorSpan(Color.RED), 4, 4+s.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        SpannableString ss = new SpannableString("总利息：" + s + "元");
+        ss.setSpan(new ForegroundColorSpan(Color.RED), 4, 4 + s.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         tvSumLixi.setText(ss);
     }
 
